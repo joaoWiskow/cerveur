@@ -1,18 +1,16 @@
 CC=gcc
-CFLAGS=-Iinclude
+CFLAGS=-Iinclude -pg -Wall
 DEPS = HTTP_Server.h
-exec = server.o
+TARGET = server.out
 sources = $(wildcard src/*.c)
 objects = $(sources:.c=.o)
-flags = -g -Wall -lm -ldl -fPIC -rdynamic -I./include
-# flags = -I./include
+flags = -g -Wall -lm -ldl -fPIC -rdynamic -I./include -pg
 
-$(exec): $(objects)
-	gcc $(objects) $(flags) -o $(exec)
+$(TARGET): $(objects)
+	$(CC) $(objects) $(flags) -o $(TARGET)
 
 %.o: %.c %.h
-	gcc -c $(flags) $< -o $@
-
+	$(CC) -c $(flags) $< -o $@
 
 clean:
 	-rm *.out
@@ -20,3 +18,8 @@ clean:
 	-rm *.a
 	-rm src/*.a
 	-rm src/*.o
+
+profile: $(TARGET)
+	./$(TARGET)
+	gprof $(TARGET) gmon.out > relatorio.txt
+	cat relatorio.txt
