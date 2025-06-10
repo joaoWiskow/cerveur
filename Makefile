@@ -1,26 +1,20 @@
-CC=gcc
-CFLAGS=-Iinclude -pg -Wall
-DEPS = HTTP_Server.h
+CC = gcc
+CFLAGS = -Iinclude -pg -Wall
 TARGET = server.out
-sources = $(wildcard src/*.c)
-objects = $(sources:.c=.o)
-flags = -g -Wall -lm -ldl -fPIC -rdynamic -I./include -pg
+SOURCES = $(wildcard src/*.c)
+OBJECTS = $(SOURCES:.c=.o)
+LDFLAGS = -lm -ldl -fPIC -rdynamic -pg
 
-$(TARGET): $(objects)
-	$(CC) $(objects) $(flags) -o $(TARGET)
+$(TARGET): $(OBJECTS)
+	$(CC) $(OBJECTS) $(CFLAGS) -o $(TARGET) $(LDFLAGS)
 
-%.o: %.c %.h
-	$(CC) -c $(flags) $< -o $@
+%.o: %.c
+	$(CC) -c $(CFLAGS) $< -o $@
 
 clean:
-	-rm *.out
-	-rm *.o
-	-rm *.a
-	-rm src/*.a
-	-rm src/*.o
+	-rm -f *.out *.o *.a src/*.a src/*.o gmon.out relatorio.txt
 
 profile: $(TARGET)
-	./$(TARGET)
-	gprof $(TARGET) gmon.out > relatorio.txt
-	cat relatorio.txt
-//colocar sleep para aparecer na tela  depois
+	@./$(TARGET) 6969
+	@gprof $(TARGET) gmon.out > relatorio.txt
+	@cat relatorio.txt

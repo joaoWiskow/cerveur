@@ -12,7 +12,8 @@
 #include "Routes.h"
 #include "Response.h"
 
-int main() {
+int main(int argc, char *argv[]) 
+ {
 	// initiate HTTP_Server
 	HTTP_Server http_server;
 	init_server(&http_server, 6969);
@@ -28,8 +29,15 @@ int main() {
 	printf("=========ALL VAILABLE ROUTES========\n");
 	// display all available routes
 	inorder(route);
+  int profile_mode = 0;
+int connection_limit = 3;
 
-	while (1) {
+if (argc > 1 && strcmp(argv[1], "profile") == 0) {
+    profile_mode = 1;
+    printf("[INFO] Modo de profiling ativado. O servidor aceitará %d conexões e encerrará.\n", connection_limit);
+}
+int connection_count = 0;
+	while (!profile_mode || connection_count < connection_limit) {
 		char client_msg[4096] = "";
 
 		client_socket = accept(http_server.socket, NULL, NULL);
@@ -91,7 +99,9 @@ int main() {
 
 		send(client_socket, http_header, sizeof(http_header), 0);
 		close(client_socket);
+		connection_count++;
 		free(response_data);
+		
 	}
 	return 0;
 }
