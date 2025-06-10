@@ -23,4 +23,4 @@ profile: $(TARGET)
 	./$(TARGET)
 	gprof $(TARGET) gmon.out > relatorio.txt
 	cat relatorio.txt
-//colocar sleep para aparecer na tela
+//colocar sleep para aparecer na tela  depois
