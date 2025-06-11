@@ -36,8 +36,33 @@ if (argc > 1 && strcmp(argv[1], "profile") == 0) {
     profile_mode = 1;
     printf("[INFO] Modo de profiling ativado. O servidor aceitará %d conexões e encerrará.\n", connection_limit);
 }
+
+
+if (profile_mode) {
+    printf("[INFO] Executando chamadas para profiling...\n");
+
+    struct Route * testRoute = initRoute("/", "index.html");
+
+    for (int i = 0; i < 10000; i++) {
+	
+        addRoute(testRoute, "/about", "about.html");
+        addRoute(testRoute, "/contact", "contact.html");
+        addRoute(testRoute, "/services", "services.html");
+        search(testRoute, "/about");
+        search(testRoute, "/contact");
+        search(testRoute, "/services");
+        render_static_file("templates/index.html");
+        inorder(testRoute);
+		
+    }
+return 0;
+
+}
+
 int connection_count = 0;
-	while (!profile_mode || connection_count < connection_limit) {
+while (connection_count < connection_limit) {
+    // ...
+
 		char client_msg[4096] = "";
 
 		client_socket = accept(http_server.socket, NULL, NULL);
