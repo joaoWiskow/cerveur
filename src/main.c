@@ -43,7 +43,7 @@ if (profile_mode) {
 
     struct Route * testRoute = initRoute("/", "index.html");
 
-    for (int i = 0; i < 10000; i++) {
+    for (int i = 0; i < 1000000; i++) {
 	
         addRoute(testRoute, "/about", "about.html");
         addRoute(testRoute, "/contact", "contact.html");
